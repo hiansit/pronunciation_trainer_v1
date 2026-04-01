@@ -60,6 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const sentenceText = $('sentence-text');
     const sentenceTranslation = $('sentence-translation');
     const sentenceLevelBadge = $('sentence-level-badge');
+    const sentenceNotes = $('sentence-notes');
     const resultTextEl = $('result-text');
     const diffContainer = $('diff-container');
     const diffResult = $('diff-result');
@@ -160,11 +161,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const el = document.createElement('div');
                 el.className = 'sp-card-strip';
                 el.style.setProperty('--strip-color', config.color);
+                const notesText = card.fields.notes ? `<div class="sp-strip-notes">${escapeHtml(card.fields.notes)}</div>` : '';
                 el.innerHTML = `
                     <div class="sp-level-indicator" style="background:${config.color}"></div>
                     <div class="sp-strip-content">
                         <div class="sp-strip-main">${escapeHtml(card.fields.text || '')}</div>
                         <div class="sp-strip-sub">${escapeHtml(card.fields.translation || '')}</div>
+                        ${notesText}
                     </div>
                     <div class="sp-strip-meta">
                         <span class="sp-level-badge" style="background:${config.color}">${config.label}</span>
@@ -422,6 +425,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         practiceCounter.textContent = `${practiceIndex + 1} / ${practiceCards.length}`;
         sentenceText.textContent = card.fields.text || '(テキストなし)';
         sentenceTranslation.textContent = card.fields.translation || '';
+
+        // 補足情報(notes)の表示
+        const notesContent = card.fields.notes || '';
+        if (notesContent) {
+            sentenceNotes.textContent = notesContent;
+            sentenceNotes.classList.remove('hidden');
+        } else {
+            sentenceNotes.textContent = '';
+            sentenceNotes.classList.add('hidden');
+        }
 
         sentenceLevelBadge.textContent = config.label;
         sentenceLevelBadge.style.background = config.color;

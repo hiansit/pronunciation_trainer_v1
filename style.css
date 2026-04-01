@@ -483,6 +483,30 @@ body::before {
     font-style: italic;
 }
 
+.sentence-notes {
+    margin-top: 10px;
+    padding: 8px 14px;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    background: rgba(99, 102, 241, 0.08);
+    border-left: 3px solid var(--color-primary);
+    border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+    text-align: left;
+    line-height: 1.6;
+}
+
+.sentence-notes::before {
+    content: '💡 ';
+}
+
+/* デッキ管理カード一覧のnotes */
+.sp-strip-notes {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-top: 2px;
+    font-style: italic;
+}
+
 .sentence-level-badge {
     position: absolute;
     top: 16px;
