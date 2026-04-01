@@ -1,0 +1,351 @@
+/* ═══════════════════════════════════════════════════
+   StudyProgressUI — 進捗可視化コンポーネント用スタイル
+   ═══════════════════════════════════════════════════ */
+
+/* ─── カラーパレット ──────────────────────────────── */
+:root {
+    --sp-level-0: #6b7280;
+    --sp-level-1: #ef4444;
+    --sp-level-2: #f59e0b;
+    --sp-level-3: #eab308;
+    --sp-level-4: #22c55e;
+
+    --sp-bg-primary: rgba(15, 23, 42, 0.6);
+    --sp-bg-secondary: rgba(30, 41, 59, 0.8);
+    --sp-bg-card: rgba(30, 41, 59, 0.5);
+    --sp-text-primary: #f1f5f9;
+    --sp-text-secondary: #94a3b8;
+    --sp-border: rgba(100, 116, 139, 0.3);
+    --sp-radius: 12px;
+    --sp-radius-sm: 8px;
+}
+
+/* ─── フィルターバー ─────────────────────────────── */
+.sp-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding: 12px;
+    background: var(--sp-bg-secondary);
+    border-radius: var(--sp-radius);
+    border: 1px solid var(--sp-border);
+}
+
+.sp-filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border: 1px solid var(--sp-border);
+    border-radius: 20px;
+    background: transparent;
+    color: var(--sp-text-secondary);
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.sp-filter-btn:hover {
+    background: rgba(100, 116, 139, 0.2);
+    color: var(--sp-text-primary);
+}
+
+.sp-filter-btn.active {
+    background: rgba(100, 116, 139, 0.3);
+    color: var(--sp-text-primary);
+    border-color: var(--filter-color, var(--sp-text-secondary));
+    box-shadow: 0 0 12px rgba(100, 116, 139, 0.15);
+}
+
+.sp-level-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* ─── カードグリッド ─────────────────────────────── */
+.sp-card-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* ─── カード短冊 ─────────────────────────────────── */
+.sp-card-strip {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    background: var(--sp-bg-card);
+    border-radius: var(--sp-radius-sm);
+    border: 1px solid var(--sp-border);
+    border-left: 4px solid var(--strip-color, var(--sp-level-0));
+    transition: all 0.2s ease;
+    animation: stripSlideIn 0.35s ease-out both;
+}
+
+.sp-card-strip.clickable {
+    cursor: pointer;
+}
+
+.sp-card-strip.clickable:hover {
+    background: rgba(51, 65, 85, 0.7);
+    transform: translateX(4px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes stripSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* レベルインジケーター */
+.sp-level-indicator {
+    width: 6px;
+    height: 36px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    transition: height 0.3s ease;
+}
+
+/* コンテンツ */
+.sp-strip-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.sp-strip-main {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--sp-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sp-strip-sub {
+    font-size: 0.8rem;
+    color: var(--sp-text-secondary);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* メタ情報 */
+.sp-strip-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.sp-level-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.sp-practice-count {
+    font-size: 0.75rem;
+    color: var(--sp-text-secondary);
+    white-space: nowrap;
+}
+
+/* 空状態 */
+.sp-empty-state {
+    text-align: center;
+    padding: 40px;
+    color: var(--sp-text-secondary);
+    font-size: 0.9rem;
+}
+
+/* ─── サマリーバー ───────────────────────────────── */
+.sp-summary-container {
+    padding: 20px;
+    background: var(--sp-bg-secondary);
+    border-radius: var(--sp-radius);
+    border: 1px solid var(--sp-border);
+}
+
+.sp-summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.sp-summary-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--sp-text-primary);
+}
+
+.sp-summary-ratio {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.sp-summary-pct {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--sp-level-4);
+}
+
+.sp-summary-detail {
+    font-size: 0.82rem;
+    color: var(--sp-text-secondary);
+}
+
+.sp-summary-empty {
+    text-align: center;
+    padding: 20px;
+    color: var(--sp-text-secondary);
+}
+
+/* スタックドバー */
+.sp-stacked-bar {
+    display: flex;
+    height: 14px;
+    border-radius: 7px;
+    overflow: hidden;
+    background: rgba(51, 65, 85, 0.5);
+    margin-bottom: 14px;
+}
+
+.sp-bar-segment {
+    height: 100%;
+    transition: width 0.6s ease;
+    position: relative;
+}
+
+.sp-bar-segment:first-child {
+    border-radius: 7px 0 0 7px;
+}
+
+.sp-bar-segment:last-child {
+    border-radius: 0 7px 7px 0;
+}
+
+.sp-bar-segment:only-child {
+    border-radius: 7px;
+}
+
+/* レジェンド */
+.sp-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+.sp-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sp-legend-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.sp-legend-label {
+    font-size: 0.78rem;
+    color: var(--sp-text-secondary);
+}
+
+.sp-legend-count {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--sp-text-primary);
+}
+
+/* ─── 統計カード ─────────────────────────────────── */
+.sp-stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+}
+
+.sp-stat-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 12px;
+    background: var(--sp-bg-card);
+    border-radius: var(--sp-radius-sm);
+    border: 1px solid var(--sp-border);
+    transition: transform 0.2s ease;
+}
+
+.sp-stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.sp-stat-icon {
+    font-size: 1.4rem;
+    margin-bottom: 6px;
+}
+
+.sp-stat-value {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--sp-text-primary);
+}
+
+.sp-stat-label {
+    font-size: 0.75rem;
+    color: var(--sp-text-secondary);
+    margin-top: 2px;
+}
+
+/* ─── レスポンシブ ───────────────────────────────── */
+@media (max-width: 600px) {
+    .sp-filter-bar {
+        gap: 6px;
+        padding: 10px;
+    }
+
+    .sp-filter-btn {
+        padding: 5px 10px;
+        font-size: 0.75rem;
+    }
+
+    .sp-card-strip {
+        padding: 10px 14px;
+        gap: 10px;
+    }
+
+    .sp-strip-meta {
+        flex-direction: column;
+        gap: 4px;
+        align-items: flex-end;
+    }
+
+    .sp-stats-container {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    }
+
+    .sp-legend {
+        gap: 8px;
+    }
+}

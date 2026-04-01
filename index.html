@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>発音特訓ツール Pro</title>
+    <meta name="description" content="Web Speech APIを活用した発音練習ツール。多数の例文を管理し、TTS再生・マイク入力・発音チェックで体系的に学習できます。">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="lib/study-progress-ui.css">
+</head>
+<body>
+
+<div class="app-container">
+
+    <!-- ヘッダー -->
+    <header class="app-header">
+        <h1 class="app-title">🎙 発音特訓ツール Pro</h1>
+        <p class="app-subtitle">多数の例文で発音を体系的にトレーニング</p>
+    </header>
+
+    <!-- ナビゲーションタブ -->
+    <nav class="nav-tabs" id="nav-tabs">
+        <button class="nav-tab active" data-view="deck-view" id="tab-deck">
+            <span class="tab-icon">📚</span>
+            <span class="tab-label">デッキ管理</span>
+        </button>
+        <button class="nav-tab" data-view="practice-view" id="tab-practice">
+            <span class="tab-icon">🎯</span>
+            <span class="tab-label">練習</span>
+        </button>
+        <button class="nav-tab" data-view="progress-view" id="tab-progress">
+            <span class="tab-icon">📊</span>
+            <span class="tab-label">進捗一覧</span>
+        </button>
+    </nav>
+
+    <!-- ═══ ① デッキ管理ビュー ═══ -->
+    <div class="view active" id="deck-view">
+
+        <!-- デッキ一覧 -->
+        <div class="glass-card">
+            <div class="card-header">
+                <h2 class="card-title">デッキ一覧</h2>
+                <button class="btn btn-primary btn-sm" id="btn-create-deck">＋ 新規作成</button>
+            </div>
+            <div class="deck-list" id="deck-list">
+                <!-- JS で動的生成 -->
+            </div>
+            <div id="deck-empty" class="text-center text-muted text-sm mt-2 hidden">
+                デッキがまだ登録されていません。「新規作成」から始めましょう。
+            </div>
+        </div>
+
+        <!-- 選択中デッキの操作パネル -->
+        <div class="glass-card hidden" id="deck-detail-panel">
+            <div class="card-header">
+                <h2 class="card-title" id="deck-detail-name">（デッキ名）</h2>
+                <div style="display:flex;gap:8px">
+                    <button class="btn btn-ghost btn-sm" id="btn-edit-deck">✏️ 編集</button>
+                    <button class="btn btn-danger btn-sm" id="btn-delete-deck">🗑 削除</button>
+                </div>
+            </div>
+
+            <div id="deck-detail-stats" class="mb-2"></div>
+
+            <!-- カード管理 -->
+            <div class="card-header mt-2">
+                <h3 class="card-title text-sm">例文一覧 (<span id="card-count">0</span>件)</h3>
+                <div style="display:flex;gap:8px">
+                    <button class="btn btn-accent btn-sm" id="btn-import-tsv">📋 TSVインポート</button>
+                    <button class="btn btn-ghost btn-sm" id="btn-add-card">＋ 例文追加</button>
+                </div>
+            </div>
+
+            <div id="deck-cards-list" class="mt-1">
+                <!-- JS で動的生成 -->
+            </div>
+
+            <!-- バックアップ -->
+            <div class="flex-between mt-3">
+                <button class="btn btn-ghost btn-sm" id="btn-export-deck">💾 JSONエクスポート</button>
+                <button class="btn btn-ghost btn-sm" id="btn-import-json">📂 JSONインポート</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ ② 練習ビュー ═══ -->
+    <div class="view" id="practice-view">
+
+        <!-- 練習ヘッダー -->
+        <div class="glass-card">
+            <div class="practice-header">
+                <div class="form-group" style="margin-bottom:0;flex:1;max-width:250px">
+                    <select class="form-select" id="practice-deck-select">
+                        <option value="">デッキを選択…</option>
+                    </select>
+                </div>
+                <div class="mode-select" id="mode-select">
+                    <button class="mode-btn active" data-mode="sequential">順番通り</button>
+                    <button class="mode-btn" data-mode="random">ランダム</button>
+                    <button class="mode-btn" data-mode="weak">弱点集中</button>
+                </div>
+                <div class="form-group" style="margin-bottom:0">
+                    <select class="form-select" id="lang-select" style="min-width:120px">
+                        <option value="en-US">English (US)</option>
+                        <option value="en-GB">English (UK)</option>
+                        <option value="zh-CN">中文 (简体)</option>
+                        <option value="zh-TW">中文 (繁體)</option>
+                        <option value="ko-KR">한국어</option>
+                        <option value="ja-JP">日本語</option>
+                        <option value="fr-FR">Français</option>
+                        <option value="de-DE">Deutsch</option>
+                        <option value="es-ES">Español</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 練習カード未選択時 -->
+        <div class="glass-card text-center" id="practice-empty" style="padding:60px 20px">
+            <div style="font-size:3rem;margin-bottom:12px">🎙</div>
+            <p class="text-muted">上のドロップダウンからデッキを選択して練習を開始しましょう</p>
+        </div>
+
+        <!-- 練習メインエリア -->
+        <div id="practice-main" class="hidden">
+            <!-- ナビゲーション -->
+            <div class="practice-nav flex-between mb-2">
+                <button class="btn btn-ghost btn-sm" id="btn-prev">◀ 前へ</button>
+                <span class="practice-counter" id="practice-counter">1 / 10</span>
+                <button class="btn btn-ghost btn-sm" id="btn-next">次へ ▶</button>
+            </div>
+
+            <!-- 例文表示 -->
+            <div class="sentence-card" id="sentence-card">
+                <span class="sentence-level-badge" id="sentence-level-badge">未学習</span>
+                <div class="sentence-text" id="sentence-text">（例文がここに表示されます）</div>
+                <div class="sentence-translation" id="sentence-translation"></div>
+            </div>
+
+            <!-- コントロール -->
+            <div class="practice-controls">
+                <!-- お手本再生パネル -->
+                <div class="control-panel">
+                    <h3>🔊 お手本再生</h3>
+                    <button class="btn btn-primary btn-lg" id="btn-play" style="width:100%">
+                        ▶ お手本を聞く
+                    </button>
+                </div>
+
+                <!-- マイク入力パネル -->
+                <div class="control-panel">
+                    <h3>🎤 あなたの発音</h3>
+                    <button class="btn btn-accent btn-lg btn-record" id="btn-record" style="width:100%">
+                        🎤 マイク入力
+                    </button>
+                    <div class="result-area mt-1" id="result-text"></div>
+                </div>
+            </div>
+
+            <!-- 突き合わせ結果 -->
+            <div class="diff-container hidden" id="diff-container">
+                <div class="diff-title">📝 突き合わせ結果</div>
+                <div class="diff-result" id="diff-result"></div>
+
+                <div class="score-display mt-2" id="score-display">
+                    <div class="score-value" id="score-value">—</div>
+                    <div class="score-label">正確度</div>
+                </div>
+
+                <!-- レベル更新 -->
+                <div class="text-center mb-1">
+                    <span class="text-sm text-muted">習熟レベルを設定：</span>
+                </div>
+                <div class="level-update" id="level-update">
+                    <!-- JS で動的生成 -->
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary" id="btn-confirm-level">レベルを確定して次へ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ ③ 進捗一覧ビュー ═══ -->
+    <div class="view" id="progress-view">
+        <div class="glass-card">
+            <div class="card-header">
+                <h2 class="card-title">進捗一覧</h2>
+                <select class="form-select" id="progress-deck-select" style="max-width:200px">
+                    <option value="">デッキを選択…</option>
+                </select>
+            </div>
+
+            <!-- サマリーバー -->
+            <div id="progress-summary" class="mb-2"></div>
+
+            <!-- 統計 -->
+            <div id="progress-stats" class="mb-2"></div>
+        </div>
+
+        <!-- パネルビュー -->
+        <div id="progress-panel"></div>
+
+        <div class="glass-card text-center hidden" id="progress-empty" style="padding:40px">
+            <p class="text-muted">デッキを選択すると進捗が表示されます</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- ステータスバー -->
+<div class="status-bar status-ready" id="status-bar">ステータス: 待機中</div>
+
+<!-- ═══ モーダル: デッキ作成/編集 ═══ -->
+<div class="modal-overlay" id="modal-deck">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modal-deck-title">新しいデッキを作成</h3>
+            <button class="modal-close" id="modal-deck-close">✕</button>
+        </div>
+        <div class="form-group">
+            <label class="form-label">デッキ名 *</label>
+            <input type="text" class="form-input" id="input-deck-name" placeholder="例: 英語 日常会話">
+        </div>
+        <div class="form-group">
+            <label class="form-label">説明</label>
+            <input type="text" class="form-input" id="input-deck-desc" placeholder="任意の説明文">
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-ghost" id="modal-deck-cancel">キャンセル</button>
+            <button class="btn btn-primary" id="modal-deck-save">保存</button>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ モーダル: TSVインポート ═══ -->
+<div class="modal-overlay" id="modal-tsv">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">TSVインポート</h3>
+            <button class="modal-close" id="modal-tsv-close">✕</button>
+        </div>
+        <p class="text-sm text-muted mb-2">
+            タブ区切りテキストを貼り付けてください。<br>
+            形式: <code>テキスト[TAB]訳文[TAB]メモ</code> （訳文・メモは任意）
+        </p>
+        <div class="form-group">
+            <textarea class="form-textarea" id="input-tsv" rows="10"
+                placeholder="Hello, how are you?&#x9;こんにちは、お元気ですか？&#10;I'm fine, thank you.&#x9;元気です、ありがとう。"></textarea>
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-ghost" id="modal-tsv-cancel">キャンセル</button>
+            <button class="btn btn-primary" id="modal-tsv-import">インポート</button>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ モーダル: 例文追加/編集 ═══ -->
+<div class="modal-overlay" id="modal-card">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modal-card-title">例文を追加</h3>
+            <button class="modal-close" id="modal-card-close">✕</button>
+        </div>
+        <div class="form-group">
+            <label class="form-label">テキスト（練習対象） *</label>
+            <textarea class="form-textarea" id="input-card-text" rows="3" placeholder="I would like to make a reservation."></textarea>
+        </div>
+        <div class="form-group">
+            <label class="form-label">訳文・補足 （任意）</label>
+            <input type="text" class="form-input" id="input-card-translation" placeholder="予約を取りたいのですが。">
+        </div>
+        <div class="form-group">
+            <label class="form-label">メモ （任意）</label>
+            <input type="text" class="form-input" id="input-card-notes" placeholder="レストラン予約のシーン">
+        </div>
+        <input type="hidden" id="input-card-id">
+        <div class="modal-actions">
+            <button class="btn btn-ghost" id="modal-card-cancel">キャンセル</button>
+            <button class="btn btn-primary" id="modal-card-save">保存</button>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ モーダル: JSONインポート ═══ -->
+<div class="modal-overlay" id="modal-json-import">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">JSONインポート</h3>
+            <button class="modal-close" id="modal-json-close">✕</button>
+        </div>
+        <p class="text-sm text-muted mb-2">JSONファイルを選択してデッキを復元します。</p>
+        <div class="form-group">
+            <input type="file" class="form-input" id="input-json-file" accept=".json">
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-ghost" id="modal-json-cancel">キャンセル</button>
+            <button class="btn btn-primary" id="modal-json-do-import">インポート</button>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="lib/study-db.js"></script>
+<script src="lib/study-progress-ui.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
