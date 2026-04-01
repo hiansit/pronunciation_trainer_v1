@@ -1,5 +1,3 @@
-# pronunciation_trainer_v1
-webspeechAPIを使った発音特訓アプリ
 # 🎙 発音特訓ツール Pro
 
 **Web Speech API を活用した、ブラウザ完結型の発音練習ツール。**
