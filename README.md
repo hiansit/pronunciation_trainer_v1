@@ -4,7 +4,7 @@
 
 多数の例文をデッキとして管理し、お手本再生 → マイク入力 → 自動採点 → 進捗管理の流れで体系的に発音トレーニングができます。
 
-> 🌐 **[▶ オンラインデモを試す](https://your-username.github.io/your-repo-name/)**
+> 🌐 **[▶ オンラインデモを試す](https://hiansit.github.io/pronunciation_trainer_v1/)**
 > （GitHub Pages にデプロイ済み。インストール不要、登録不要。）
 
 ---
