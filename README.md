@@ -1,0 +1,2 @@
+# pronunciation_trainer_v1
+webspeechAPIを使った発音特訓アプリ
