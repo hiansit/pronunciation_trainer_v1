@@ -46,7 +46,7 @@
 | ファイル | 内容 |
 |---------|------|
 | `greetings_10.tsv` | 英語の基本挨拶10選 |
-| `greetings_zh-TW.tsv` | 繁体字中国語の基本挨拶10選 |
+| `greetings_zh-TW.tsv` | 繁体字中文(台湾華語)の基本挨拶10選 |
 | `greetings_fr.tsv` | フランス語の基本挨拶10選 |
 | `greetings_ko.tsv` | 韓国語の基本挨拶10選 |
 
