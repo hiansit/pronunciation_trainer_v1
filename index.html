@@ -145,7 +145,7 @@
                 <div class="control-panel">
                     <h3>🔊 お手本再生</h3>
                     <button class="btn btn-primary btn-lg" id="btn-play" style="width:100%">
-                        ▶ お手本を聞く
+                        ▶ お手本を聞く <span class="kbd-hint">P</span>
                     </button>
                 </div>
 
@@ -153,7 +153,7 @@
                 <div class="control-panel">
                     <h3>🎤 あなたの発音</h3>
                     <button class="btn btn-accent btn-lg btn-record" id="btn-record" style="width:100%">
-                        🎤 マイク入力
+                        🎤 マイク入力 <span class="kbd-hint">Space</span>
                     </button>
                     <div class="result-area mt-1" id="result-text"></div>
                 </div>
@@ -161,23 +161,26 @@
 
             <!-- 突き合わせ結果 -->
             <div class="diff-container hidden" id="diff-container">
-                <div class="diff-title">📝 突き合わせ結果</div>
-                <div class="diff-result" id="diff-result"></div>
-
-                <div class="score-display mt-2" id="score-display">
-                    <div class="score-value" id="score-value">—</div>
-                    <div class="score-label">正確度</div>
+                <div class="diff-header">
+                    <div class="diff-left">
+                        <div class="diff-title">📝 突き合わせ結果</div>
+                        <div class="diff-result" id="diff-result"></div>
+                    </div>
+                    <div class="score-display" id="score-display">
+                        <div class="score-value" id="score-value">—</div>
+                        <div class="score-label">正確度</div>
+                    </div>
                 </div>
 
                 <!-- レベル更新 -->
-                <div class="text-center mb-1">
-                    <span class="text-sm text-muted">習熟レベルを設定：</span>
-                </div>
-                <div class="level-update" id="level-update">
-                    <!-- JS で動的生成 -->
-                </div>
-                <div class="text-center">
-                    <button class="btn btn-primary" id="btn-confirm-level">レベルを確定して次へ</button>
+                <div class="level-row">
+                    <div class="level-row-left">
+                        <span class="text-sm text-muted">レベル設定：</span>
+                        <div class="level-update" id="level-update">
+                            <!-- JS で動的生成 -->
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="btn-confirm-level">確定して次へ <span class="kbd-hint">Enter</span></button>
                 </div>
             </div>
         </div>

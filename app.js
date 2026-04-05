@@ -792,6 +792,64 @@ document.addEventListener('DOMContentLoaded', async () => {
         return arr;
     }
 
+    // ─── キーボードショートカット ──────────────────────
+
+    document.addEventListener('keydown', (e) => {
+        // モーダルが開いている時は無効
+        if (document.querySelector('.modal-overlay.active')) return;
+
+        // テキスト入力中は無効
+        const tag = e.target.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
+        // 練習ビューがアクティブでない場合は無効
+        const practiceView = $('practice-view');
+        if (!practiceView || !practiceView.classList.contains('active')) return;
+
+        // 練習カードがない場合は無効
+        if (practiceCards.length === 0) return;
+
+        switch (e.key) {
+            case ' ':  // Space: マイク入力
+                e.preventDefault();
+                $('btn-record').click();
+                break;
+
+            case 'Enter':  // Enter: レベル確定して次へ
+                e.preventDefault();
+                if (!diffContainer.classList.contains('hidden')) {
+                    $('btn-confirm-level').click();
+                }
+                break;
+
+            case 'p':  // P: お手本再生
+            case 'P':
+                e.preventDefault();
+                $('btn-play').click();
+                break;
+
+            case 'ArrowLeft':  // ←: 前へ
+                e.preventDefault();
+                $('btn-prev').click();
+                break;
+
+            case 'ArrowRight':  // →: 次へ
+                e.preventDefault();
+                $('btn-next').click();
+                break;
+
+            case '0': case '1': case '2': case '3': case '4':  // 数字: レベル選択
+                if (!diffContainer.classList.contains('hidden')) {
+                    const levelBtns = document.querySelectorAll('.level-btn');
+                    const lvNum = parseInt(e.key);
+                    if (levelBtns[lvNum]) {
+                        levelBtns[lvNum].click();
+                    }
+                }
+                break;
+        }
+    });
+
     // ─── 初期化 ─────────────────────────────────────
 
     await refreshDeckList();
