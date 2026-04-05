@@ -95,7 +95,7 @@ body::before {
 /* ─── ヘッダー ───────────────────────────────────── */
 .app-header {
     text-align: center;
-    padding: 30px 0 20px;
+    padding: 16px 0 10px;
     position: relative;
 }
 
@@ -127,7 +127,7 @@ body::before {
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--color-glass-border);
     border-radius: var(--radius-lg);
-    margin-bottom: 24px;
+    margin-bottom: 12px;
 }
 
 .nav-tab {
@@ -185,8 +185,8 @@ body::before {
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--color-glass-border);
     border-radius: var(--radius-lg);
-    padding: 24px;
-    margin-bottom: 20px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
     transition: all var(--transition-normal);
 }
 
@@ -198,7 +198,7 @@ body::before {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: 10px;
 }
 
 .card-title {
@@ -427,9 +427,9 @@ body::before {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 8px;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 8px;
 }
 
 .practice-nav {
@@ -448,12 +448,12 @@ body::before {
 
 /* 例文表示カード */
 .sentence-card {
-    padding: 32px;
+    padding: 18px 24px;
     text-align: center;
     background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
     border: 1px solid var(--color-glass-border);
     border-radius: var(--radius-lg);
-    margin-bottom: 20px;
+    margin-bottom: 12px;
     position: relative;
     overflow: hidden;
 }
@@ -471,9 +471,9 @@ body::before {
 .sentence-text {
     font-size: 1.5rem;
     font-weight: 600;
-    line-height: 1.8;
+    line-height: 1.6;
     color: var(--color-text);
-    margin-bottom: 12px;
+    margin-bottom: 6px;
     word-break: break-word;
 }
 
@@ -522,25 +522,25 @@ body::before {
 .practice-controls {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin-bottom: 12px;
 }
 
 .control-panel {
-    padding: 20px;
+    padding: 12px 16px;
     background: var(--color-surface-2);
     border: 1px solid var(--color-glass-border);
     border-radius: var(--radius-md);
 }
 
 .control-panel h3 {
-    font-size: 0.88rem;
+    font-size: 0.82rem;
     font-weight: 600;
     color: var(--color-text-secondary);
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
 /* 録音ボタン - 特別なスタイリング */
@@ -581,18 +581,18 @@ body::before {
 
 /* 突き合わせ結果 */
 .diff-container {
-    padding: 20px;
+    padding: 14px 16px;
     background: var(--color-surface-2);
     border-radius: var(--radius-md);
     border: 1px solid var(--color-glass-border);
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .diff-title {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     font-weight: 600;
     color: var(--color-text-secondary);
-    margin-bottom: 12px;
+    margin-bottom: 6px;
 }
 
 .diff-result {
@@ -634,12 +634,12 @@ body::before {
 /* スコア表示 */
 .score-display {
     text-align: center;
-    padding: 20px;
-    margin-bottom: 20px;
+    padding: 8px;
+    margin-bottom: 8px;
 }
 
 .score-value {
-    font-size: 3rem;
+    font-size: 2.2rem;
     font-weight: 800;
     background: linear-gradient(135deg, var(--color-primary-light), var(--color-accent));
     -webkit-background-clip: text;
@@ -657,25 +657,25 @@ body::before {
 .level-update {
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
     flex-wrap: wrap;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .level-btn {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 12px 16px;
+    padding: 8px 12px;
     border: 2px solid var(--color-glass-border);
     border-radius: var(--radius-sm);
     background: transparent;
     color: var(--color-text-secondary);
     font-family: var(--font-family);
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     cursor: pointer;
     transition: all var(--transition-fast);
-    min-width: 80px;
+    min-width: 64px;
 }
 
 .level-btn:hover {
