@@ -508,6 +508,96 @@ body::before {
     font-style: italic;
 }
 
+/* 誤認識警告 */
+.misrecognition-warning {
+    margin-top: 10px;
+    padding: 8px 14px;
+    font-size: 0.85rem;
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.1);
+    border-left: 3px solid #f59e0b;
+    border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+    text-align: left;
+    line-height: 1.6;
+}
+
+/* トグルスイッチ */
+.practice-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.misrec-toggle {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.misrec-toggle input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    accent-color: #f59e0b;
+    cursor: pointer;
+}
+
+.misrec-toggle-label {
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
+    transition: color var(--transition-fast);
+}
+
+.misrec-toggle:hover .misrec-toggle-label {
+    color: var(--color-text-secondary);
+}
+
+/* レベルフィルタ */
+.level-filter {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    width: 100%;
+    padding-top: 4px;
+}
+
+.level-filter-label {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-right: 2px;
+}
+
+.level-filter-item {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.level-filter-item input[type="checkbox"] {
+    width: 13px;
+    height: 13px;
+    cursor: pointer;
+    accent-color: var(--color-primary);
+}
+
+.lf-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 1px 5px;
+    border-radius: 3px;
+    line-height: 1.4;
+}
+
+.lf-0 { color: #94a3b8; }
+.lf-1 { color: #f97316; }
+.lf-2 { color: #eab308; }
+.lf-3 { color: #22c55e; }
+.lf-4 { color: #06b6d4; }
+
 .sentence-level-badge {
     position: absolute;
     top: 16px;

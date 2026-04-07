@@ -113,6 +113,15 @@
                         <option value="es-ES">Español</option>
                     </select>
                 </div>
+                <!-- レベルフィルタ -->
+                <div class="level-filter" id="level-filter">
+                    <span class="level-filter-label">レベル:</span>
+                    <label class="level-filter-item"><input type="checkbox" class="level-filter-cb" value="0" checked><span class="lf-badge lf-0">0</span></label>
+                    <label class="level-filter-item"><input type="checkbox" class="level-filter-cb" value="1" checked><span class="lf-badge lf-1">1</span></label>
+                    <label class="level-filter-item"><input type="checkbox" class="level-filter-cb" value="2" checked><span class="lf-badge lf-2">2</span></label>
+                    <label class="level-filter-item"><input type="checkbox" class="level-filter-cb" value="3" checked><span class="lf-badge lf-3">3</span></label>
+                    <label class="level-filter-item"><input type="checkbox" class="level-filter-cb" value="4" checked><span class="lf-badge lf-4">4</span></label>
+                </div>
             </div>
         </div>
 
@@ -128,7 +137,13 @@
             <div class="practice-nav flex-between mb-2">
                 <button class="btn btn-ghost btn-sm" id="btn-prev">◀ 前へ</button>
                 <span class="practice-counter" id="practice-counter">1 / 10</span>
-                <button class="btn btn-ghost btn-sm" id="btn-next">次へ ▶</button>
+                <div class="practice-nav-right">
+                    <label class="misrec-toggle" title="過去の誤認識を表示">
+                        <input type="checkbox" id="toggle-misrec" checked>
+                        <span class="misrec-toggle-label">⚠️ 誤認識</span>
+                    </label>
+                    <button class="btn btn-ghost btn-sm" id="btn-next">次へ ▶</button>
+                </div>
             </div>
 
             <!-- 例文表示 -->
@@ -137,6 +152,9 @@
                 <div class="sentence-text" id="sentence-text">（例文がここに表示されます）</div>
                 <div class="sentence-translation" id="sentence-translation"></div>
                 <div class="sentence-notes hidden" id="sentence-notes"></div>
+                <div class="misrecognition-warning hidden" id="misrecognition-warning">
+                    ⚠️ 過去の誤認識: <span id="misrecognition-alert"></span>
+                </div>
             </div>
 
             <!-- コントロール -->

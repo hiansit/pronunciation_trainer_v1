@@ -28,12 +28,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     // ─── 状態管理 ───────────────────────────────────
 
     let currentDeckId = null;       // デッキ管理で選択中のID
-    let practiceCards = [];         // 練習用カード一覧
+    let allPracticeCards = [];      // 全カード（フィルタ前）
+    let practiceCards = [];         // 練習用カード一覧（フィルタ後）
     let practiceIndex = 0;          // 現在の練習インデックス
     let practiceMode = 'sequential';
     let selectedLevel = null;       // レベル更新用
     let editingDeckId = null;       // 編集中のデッキID (null=新規)
     let editingCardId = null;       // 編集中のカードID (null=新規)
+    let lastSpokenText = '';        // 最後の音声認識結果を一時保持
+    let showMisrecognitions = localStorage.getItem('showMisrecognitions') !== 'false'; // 誤認識注意喚起表示
 
     // ─── DOM要素 ────────────────────────────────────
 
@@ -378,8 +381,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        practiceCards = await db.getCardsWithProgress(deckId);
-        if (practiceCards.length === 0) {
+        allPracticeCards = await db.getCardsWithProgress(deckId);
+        if (allPracticeCards.length === 0) {
             practiceEmpty.classList.remove('hidden');
             practiceMain.classList.add('hidden');
             updateStatus('選択したデッキに例文がありません', 'error');
@@ -405,18 +408,58 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
+    // レベルフィルタ変更時
+    document.querySelectorAll('.level-filter-cb').forEach(cb => {
+        cb.addEventListener('change', () => {
+            applyPracticeMode();
+            practiceIndex = 0;
+            if (allPracticeCards.length > 0) showCurrentCard();
+        });
+    });
+
+    function getActiveLevelFilter() {
+        const checkboxes = document.querySelectorAll('.level-filter-cb');
+        if (checkboxes.length === 0) return null; // チェックボックス未生成時は全表示
+        const levels = new Set();
+        checkboxes.forEach(cb => { if (cb.checked) levels.add(parseInt(cb.value)); });
+        return levels;
+    }
+
     function applyPracticeMode() {
+        // レベルフィルタ適用
+        const levelFilter = getActiveLevelFilter();
+        let filtered = [...allPracticeCards];
+        if (levelFilter && levelFilter.size > 0) {
+            filtered = filtered.filter(c => levelFilter.has(c.progress?.level || 0));
+        } else if (levelFilter && levelFilter.size === 0) {
+            filtered = []; // 全チェックOFFなら0件
+        }
+
+        // モード適用
         if (practiceMode === 'random') {
-            practiceCards = shuffleArray([...practiceCards]);
+            practiceCards = shuffleArray(filtered);
         } else if (practiceMode === 'weak') {
-            practiceCards.sort((a, b) => (a.progress?.level || 0) - (b.progress?.level || 0));
+            filtered.sort((a, b) => (a.progress?.level || 0) - (b.progress?.level || 0));
+            practiceCards = filtered;
         } else {
-            practiceCards.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+            filtered.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+            practiceCards = filtered;
         }
     }
 
     function showCurrentCard() {
-        if (practiceCards.length === 0) return;
+        if (practiceCards.length === 0) {
+            practiceCounter.textContent = '0 / 0';
+            sentenceText.textContent = '（対象なし）';
+            sentenceTranslation.textContent = 'レベルフィルタを変更してください';
+            sentenceNotes.classList.add('hidden');
+            sentenceLevelBadge.textContent = '—';
+            sentenceLevelBadge.style.background = '#555';
+            diffContainer.classList.add('hidden');
+            const misrecWarning = $('misrecognition-warning');
+            if (misrecWarning) misrecWarning.classList.add('hidden');
+            return;
+        }
 
         const card = practiceCards[practiceIndex];
         const level = card.progress?.level || 0;
@@ -443,6 +486,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         resultTextEl.innerHTML = '';
         diffContainer.classList.add('hidden');
         selectedLevel = null;
+        lastSpokenText = '';  // 認識結果もリセット
+
+        // 誤認識の注意喚起表示
+        const misrecWarning = $('misrecognition-warning');
+        if (misrecWarning) {
+            if (showMisrecognitions && card.progress?.misrecognitions?.length > 0) {
+                const items = card.progress.misrecognitions
+                    .map(m => `${m.spokenText}(${m.count}回)`)
+                    .join(', ');
+                $('misrecognition-alert').textContent = items;
+                misrecWarning.classList.remove('hidden');
+            } else {
+                misrecWarning.classList.add('hidden');
+            }
+        }
 
         updateStatus('待機中', 'ready');
     }
@@ -591,6 +649,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         buildLevelButtons(card.progress?.level || 0, suggested);
 
         updateStatus(`正確度: ${score}%`, 'ready');
+
+        // 確定ボタン押下時に使うため一時保存
+        lastSpokenText = spokenText;
     }
 
     function computeDiff(original, spoken) {
@@ -687,7 +748,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         const scoreText = scoreValue.textContent.replace('%', '');
         const score = parseInt(scoreText) || 0;
 
-        await db.updateProgress(card.id, { level, score });
+        // 誤認識データを含めて進捗更新
+        const progressUpdate = { level, score };
+        if (score < 100 && lastSpokenText) {
+            progressUpdate.spokenText = lastSpokenText;
+            progressUpdate.originalText = card.fields.text || '';
+        }
+        await db.updateProgress(card.id, progressUpdate);
+        lastSpokenText = '';  // リセット
 
         // ローカル状態も更新
         card.progress = {
@@ -854,6 +922,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     await refreshDeckList();
     updateStatus('待機中', 'ready');
+
+    // 誤認識トグルの初期状態設定
+    const toggleMisrec = $('toggle-misrec');
+    if (toggleMisrec) {
+        toggleMisrec.checked = showMisrecognitions;
+        toggleMisrec.onchange = (e) => {
+            showMisrecognitions = e.target.checked;
+            localStorage.setItem('showMisrecognitions', showMisrecognitions);
+            if (practiceCards.length > 0) showCurrentCard();
+        };
+    }
 
     // 音声リスト読み込み（Chrome対策）
     if (synth && synth.onvoiceschanged !== undefined) {
