@@ -37,6 +37,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     let editingCardId = null;       // 編集中のカードID (null=新規)
     let lastSpokenText = '';        // 最後の音声認識結果を一時保持
     let showMisrecognitions = localStorage.getItem('showMisrecognitions') !== 'false'; // 誤認識注意喚起表示
+    let showDispText = localStorage.getItem('showDispText') !== 'false';   // テキスト表示
+    let showDispTrans = localStorage.getItem('showDispTrans') !== 'false'; // 訳表示
+    let showDispNotes = localStorage.getItem('showDispNotes') !== 'false'; // 補足表示
 
     // ─── DOM要素 ────────────────────────────────────
 
@@ -466,12 +469,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         const config = getLevelConfig(level);
 
         practiceCounter.textContent = `${practiceIndex + 1} / ${practiceCards.length}`;
+        
+        // テキスト表示
         sentenceText.textContent = card.fields.text || '(テキストなし)';
+        if (showDispText) {
+            sentenceText.classList.remove('hidden');
+        } else {
+            sentenceText.classList.add('hidden');
+        }
+
+        // 訳表示
         sentenceTranslation.textContent = card.fields.translation || '';
+        if (showDispTrans && card.fields.translation) {
+            sentenceTranslation.classList.remove('hidden');
+        } else {
+            sentenceTranslation.classList.add('hidden');
+        }
 
         // 補足情報(notes)の表示
         const notesContent = card.fields.notes || '';
-        if (notesContent) {
+        if (showDispNotes && notesContent) {
             sentenceNotes.textContent = notesContent;
             sentenceNotes.classList.remove('hidden');
         } else {
@@ -933,6 +950,24 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (practiceCards.length > 0) showCurrentCard();
         };
     }
+
+    // 表示トグルの初期設定
+    const setupDisplayToggle = (id, stateVar, storageKey) => {
+        const toggle = $(id);
+        if (toggle) {
+            toggle.checked = stateVar;
+            toggle.onchange = (e) => {
+                localStorage.setItem(storageKey, e.target.checked);
+                if (id === 'toggle-disp-text') showDispText = e.target.checked;
+                if (id === 'toggle-disp-trans') showDispTrans = e.target.checked;
+                if (id === 'toggle-disp-notes') showDispNotes = e.target.checked;
+                if (practiceCards.length > 0) showCurrentCard();
+            };
+        }
+    };
+    setupDisplayToggle('toggle-disp-text', showDispText, 'showDispText');
+    setupDisplayToggle('toggle-disp-trans', showDispTrans, 'showDispTrans');
+    setupDisplayToggle('toggle-disp-notes', showDispNotes, 'showDispNotes');
 
     // 音声リスト読み込み（Chrome対策）
     if (synth && synth.onvoiceschanged !== undefined) {

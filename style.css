@@ -526,6 +526,20 @@ body::before {
     display: flex;
     align-items: center;
     gap: 8px;
+    flex-wrap: wrap;
+}
+
+.display-toggles {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-separator {
+    width: 1px;
+    height: 16px;
+    background-color: var(--color-glass-border);
+    margin: 0 4px;
 }
 
 .misrec-toggle {
