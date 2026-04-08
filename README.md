@@ -96,5 +96,16 @@ English (US/UK) · 中文 (简体/繁體) · 한국어 · 日本語 · Français
 
 [MIT License](LICENSE) — 自由に利用・改変・再配布できます。
 
-## 利用している外部ライブラリ
-- [Chart.js](https://www.chartjs.org/) (MIT License) - グラフ描画機能
+
+---
+
+## 📦 サードパーティライセンス (Third-Party Licenses)
+
+本プロジェクトは以下の外部ライブラリをプロジェクト内に同梱（`lib/` フォルダ内）して利用しています。これらのファイルについては、各ライブラリの提供元が定めるオリジナルのライセンスが適用されます。
+
+*   **[Chart.js](https://www.chartjs.org/)** (v4.4.2)
+    *   **著作権**: Copyright (c) 2023 Chart.js Contributors
+    *   **ライセンス**: MIT License
+    *   **ファイル**: `lib/chart.umd.js`
+    *   （※ファイルヘッダにもライセンス情報が明記されています）
+
