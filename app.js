@@ -338,6 +338,49 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateStatus('デッキをエクスポートしました', 'ready');
     };
 
+    // 誤認識（弱点）テキスト抽出
+    $('btn-export-misrec').onclick = async () => {
+        if (!currentDeckId) return;
+        const deck = await db.getDeck(currentDeckId);
+        const cardsWithProgress = await db.getCardsWithProgress(currentDeckId);
+
+        let outputText = `■ デッキ「${deck.name}」の誤認識抽出結果\n`;
+        const now = new Date();
+        outputText += `抽出日時: ${now.toLocaleString()}\n`;
+        outputText += `=========================================\n\n`;
+
+        let count = 0;
+        cardsWithProgress.forEach(card => {
+            const misrecs = card.progress?.misrecognitions || [];
+            if (misrecs.length > 0) {
+                count++;
+                outputText += `【想定テキスト】: ${card.fields.text || ''}\n`;
+                if (card.fields.translation) {
+                    outputText += `（訳・参考）: ${card.fields.translation}\n`;
+                }
+                outputText += `【誤認識履歴】:\n`;
+                misrecs.forEach(m => {
+                    outputText += `  - ${m.spokenText} (${m.count}回)\n`;
+                });
+                outputText += `-----------------------------------------\n`;
+            }
+        });
+
+        if (count === 0) {
+            updateStatus('誤認識データがありません', 'ready');
+            return;
+        }
+
+        const blob = new Blob([outputText], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `misrec_${deck.name.replace(/\s+/g, '_')}.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
+        updateStatus(`${count}件の誤認識データを抽出しました`, 'ready');
+    };
+
     // JSONインポート
     $('btn-import-json').onclick = () => {
         $('input-json-file').value = '';
