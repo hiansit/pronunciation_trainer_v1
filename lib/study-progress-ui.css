@@ -349,3 +349,76 @@
         gap: 8px;
     }
 }
+
+/* ─── グリッド（タイル）表示モード ─── */
+.sp-card-grid.sp-grid-mode {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+}
+
+.sp-grid-mode .sp-card-strip {
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    padding: 18px 10px 10px 10px;
+    height: 140px;
+    border: none;
+    background: var(--strip-color);
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    animation: stripSlideIn 0.35s ease-out both;
+}
+
+.sp-grid-mode .sp-card-strip.clickable:hover {
+    transform: translateY(-4px);
+    background: var(--strip-color);
+    filter: brightness(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.sp-grid-mode .sp-level-indicator {
+    display: none;
+}
+
+.sp-grid-mode .sp-strip-main {
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.sp-grid-mode .sp-strip-sub {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.75rem;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.sp-grid-mode .sp-strip-meta {
+    margin-top: auto;
+    justify-content: center;
+}
+
+.sp-grid-mode .sp-level-badge {
+    background: rgba(0, 0, 0, 0.15) !important;
+    color: #fff;
+    padding: 2px 8px;
+    font-size: 0.7rem;
+}
+
+.sp-grid-mode .sp-practice-count {
+    display: none;
+}
+
+.sp-layout-toggle {
+    margin-left: auto;
+}
