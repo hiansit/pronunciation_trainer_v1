@@ -509,10 +509,29 @@ document.addEventListener('DOMContentLoaded', async () => {
         const misrecWarning = $('misrecognition-warning');
         if (misrecWarning) {
             if (showMisrecognitions && card.progress?.misrecognitions?.length > 0) {
-                const items = card.progress.misrecognitions
-                    .map(m => `${m.spokenText}(${m.count}回)`)
-                    .join(', ');
-                $('misrecognition-alert').textContent = items;
+                const alertContainer = $('misrecognition-alert');
+                alertContainer.innerHTML = '';
+                
+                card.progress.misrecognitions.forEach(m => {
+                    const span = document.createElement('span');
+                    span.className = 'misrec-item';
+                    
+                    const textSpan = document.createElement('span');
+                    textSpan.textContent = `${m.spokenText}(${m.count}回)`;
+                    span.appendChild(textSpan);
+                    
+                    const delBtn = document.createElement('span');
+                    delBtn.className = 'misrec-delete';
+                    delBtn.textContent = '×';
+                    delBtn.onclick = async () => {
+                        await db.removeMisrecognition(card.id, m.spokenText);
+                        card.progress.misrecognitions = card.progress.misrecognitions.filter(x => x.spokenText !== m.spokenText);
+                        showCurrentCard();
+                    };
+                    span.appendChild(delBtn);
+                    
+                    alertContainer.appendChild(span);
+                });
                 misrecWarning.classList.remove('hidden');
             } else {
                 misrecWarning.classList.add('hidden');
