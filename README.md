@@ -79,12 +79,17 @@ English (US/UK) · 中文 (简体/繁體) · 한국어 · 日本語 · Français
 ├── index.html          # メインページ（SPA）
 ├── style.css           # アプリスタイル
 ├── app.js              # アプリケーションロジック
-├── lib/                # 汎用ライブラリ（他プロジェクトでも再利用可）
+├── lib/                # 汎用ライブラリ
 │   ├── study-db.js         # IndexedDB 教材・進捗管理
 │   ├── study-progress-ui.js    # 進捗可視化コンポーネント
-│   └── study-progress-ui.css   # 進捗UI スタイル
+│   ├── study-progress-ui.css   # 進捗UI スタイル
+│   └── chart.umd.js        # [外部] グラフ描画ライブラリ (Chart.js)
 ├── samples/            # サンプル教材
-│   └── greetings_10.tsv
+│   ├── greetings_10.tsv
+│   ├── greetings_zh-TW.tsv
+│   ├── greetings_de.tsv
+│   ├── greetings_fr.tsv
+│   └── greetings_ko.tsv
 └── guide/              # ユーザーガイド
     ├── user-guide.md
     └── tsv-format.md
@@ -108,4 +113,3 @@ English (US/UK) · 中文 (简体/繁體) · 한국어 · 日本語 · Français
     *   **ライセンス**: MIT License
     *   **ファイル**: `lib/chart.umd.js`
     *   （※ファイルヘッダにもライセンス情報が明記されています）
-
