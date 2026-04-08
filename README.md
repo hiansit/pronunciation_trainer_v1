@@ -95,3 +95,6 @@ English (US/UK) · 中文 (简体/繁體) · 한국어 · 日本語 · Français
 ## 📄 ライセンス
 
 [MIT License](LICENSE) — 自由に利用・改変・再配布できます。
+
+## 利用している外部ライブラリ
+- [Chart.js](https://www.chartjs.org/) (MIT License) - グラフ描画機能
