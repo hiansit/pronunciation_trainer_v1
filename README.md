@@ -53,6 +53,10 @@
 
 TSVインポート画面にコピー & ペーストして使えます。
 
+> 💡 **より本格的な学習データをお探しの方へ**
+> このアプリに最適化された **本格的な台湾華語（繁体字中文）の教材データ集** を別リポジトリにて公開しています。ぜひご活用ください！
+> 👉 **[pronunciation_trainer_data_zh-TW](https://github.com/hiansit/pronunciation_trainer_data_zh-TW)**
+
 ---
 
 ## 🌍 対応言語
