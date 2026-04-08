@@ -7,6 +7,7 @@
     <meta name="description" content="Web Speech APIを活用した発音練習ツール。多数の例文を管理し、TTS再生・マイク入力・発音チェックで体系的に学習できます。">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="lib/study-progress-ui.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -243,6 +244,19 @@
 
             <!-- サマリーバー -->
             <div id="progress-summary" class="mb-2"></div>
+
+            <!-- 進捗グラフ -->
+            <div class="mb-2 glass-card" id="progress-graph-container" style="display: none; padding: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <div style="font-size: 1rem; font-weight: bold;">📈 学習推移グラフ</div>
+                    <label style="font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 4px; user-select: none;">
+                        <input type="checkbox" id="toggle-stacked-chart" checked> 積み上げ表示
+                    </label>
+                </div>
+                <div style="height: 250px; position: relative;" id="progress-graph-wrapper">
+                    <canvas id="progress-chartCanvas"></canvas>
+                </div>
+            </div>
 
             <!-- 統計 -->
             <div id="progress-stats" class="mb-2"></div>

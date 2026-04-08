@@ -793,6 +793,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         await db.updateProgress(card.id, progressUpdate);
         lastSpokenText = '';  // リセット
 
+        // スナップショットを更新（5分インターバル制御はDB層にお任せ）
+        await db.updateDeckSnapshot(card.deckId);
+
         // ローカル状態も更新
         card.progress = {
             ...(card.progress || {}),
@@ -842,10 +845,31 @@ document.addEventListener('DOMContentLoaded', async () => {
         progressEmpty.classList.add('hidden');
 
         const cardsWithProgress = await db.getCardsWithProgress(deckId);
+        const deck = await db.getDeck(deckId);
 
         // サマリーバー
         const summary = new ProgressSummaryBar(progressSummary);
         summary.render(cardsWithProgress);
+
+        // 進捗グラフ
+        const graphContainer = $('progress-graph-container');
+        if (deck.snapshots && deck.snapshots.length > 0) {
+            graphContainer.style.display = 'block';
+            
+            const renderGraph = () => {
+                const wrapper = $('progress-graph-wrapper');
+                // canvasの再生成でChart.jsのゴミを完全にクリア
+                wrapper.innerHTML = '<canvas id="progress-chartCanvas"></canvas>';
+                const graph = new ProgressGraph('progress-chartCanvas');
+                const isStacked = $('toggle-stacked-chart').checked;
+                graph.render(deck.snapshots, isStacked);
+            };
+            
+            renderGraph();
+            $('toggle-stacked-chart').onchange = renderGraph;
+        } else {
+            graphContainer.style.display = 'none';
+        }
 
         // 統計
         const stats = new ProgressStats(progressStats);
