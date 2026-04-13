@@ -716,6 +716,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         const card = practiceCards[practiceIndex];
         if (!card) return;
 
+        // 結果判定時は、チェックボックス状態に関わらず正解（テキスト・訳・補足）を強制表示する
+        if (card.fields.text) sentenceText.classList.remove('hidden');
+        if (card.fields.translation) sentenceTranslation.classList.remove('hidden');
+        if (card.fields.notes) sentenceNotes.classList.remove('hidden');
+
         const originalText = card.fields.text || '';
         const { html, score } = computeDiff(originalText, spokenText);
 
