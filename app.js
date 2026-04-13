@@ -531,11 +531,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // 補足情報(notes)の表示
         const notesContent = card.fields.notes || '';
+        sentenceNotes.textContent = notesContent;
         if (showDispNotes && notesContent) {
-            sentenceNotes.textContent = notesContent;
             sentenceNotes.classList.remove('hidden');
         } else {
-            sentenceNotes.textContent = '';
             sentenceNotes.classList.add('hidden');
         }
 
