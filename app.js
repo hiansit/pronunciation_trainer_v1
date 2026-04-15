@@ -1025,6 +1025,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                 $('btn-next').click();
                 break;
 
+            case 'd':  // D: 辞書で確認
+            case 'D':
+                e.preventDefault();
+                if (!$('dict-lookup').classList.contains('hidden')) {
+                    $('btn-dict-lookup').click();
+                }
+                break;
+
             case '0': case '1': case '2': case '3': case '4':  // 数字: レベル選択
                 if (!diffContainer.classList.contains('hidden')) {
                     const levelBtns = document.querySelectorAll('.level-btn');
