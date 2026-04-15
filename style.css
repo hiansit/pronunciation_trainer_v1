@@ -1212,3 +1212,22 @@ body::before {
 body {
     padding-bottom: 50px;
 }
+
+/* ─── 辞書確認ボタン ──────────────────────────── */
+.dict-lookup {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    margin-top: 4px;
+}
+
+.dict-lookup .btn {
+    background: rgba(100, 200, 255, 0.15);
+    border: 1px solid rgba(100, 200, 255, 0.3);
+    color: #7ecfff;
+}
+
+.dict-lookup .btn:hover {
+    background: rgba(100, 200, 255, 0.3);
+}

@@ -733,6 +733,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         updateStatus(`正確度: ${score}%`, 'ready');
 
+        // 辞書で確認ボタンの表示制御
+        const dictLookup = $('dict-lookup');
+        const dictUrl = localStorage.getItem('dictUrl') || '';
+        if (dictLookup) {
+            if (score < 100 && dictUrl && spokenText) {
+                $('dict-lookup-word').textContent = `「${spokenText}」を辞書で検索`;
+                dictLookup.classList.remove('hidden');
+            } else {
+                dictLookup.classList.add('hidden');
+            }
+        }
+
         // 確定ボタン押下時に使うため一時保存
         lastSpokenText = spokenText;
     }
@@ -1058,6 +1070,31 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupDisplayToggle('toggle-disp-text', showDispText, 'showDispText');
     setupDisplayToggle('toggle-disp-trans', showDispTrans, 'showDispTrans');
     setupDisplayToggle('toggle-disp-notes', showDispNotes, 'showDispNotes');
+
+    // ─── 辞書リンク設定 ─────────────────────────────
+    const dictUrlInput = $('input-dict-url');
+    const dictUrlStatus = $('dict-url-status');
+    const savedDictUrl = localStorage.getItem('dictUrl') || '';
+    if (dictUrlInput && savedDictUrl) {
+        dictUrlInput.value = savedDictUrl;
+        if (dictUrlStatus) dictUrlStatus.textContent = `✅ 設定済み`;
+    }
+
+    $('btn-save-dict-url').onclick = () => {
+        const url = dictUrlInput.value.trim();
+        localStorage.setItem('dictUrl', url);
+        if (dictUrlStatus) {
+            dictUrlStatus.textContent = url ? '✅ 保存しました' : '❌ URLをクリアしました';
+        }
+        updateStatus(url ? '辞書URLを保存しました' : '辞書URLをクリアしました', 'ready');
+    };
+
+    $('btn-dict-lookup').onclick = () => {
+        const dictUrl = localStorage.getItem('dictUrl') || '';
+        if (!dictUrl || !lastSpokenText) return;
+        const searchUrl = dictUrl + encodeURIComponent(lastSpokenText);
+        window.open(searchUrl, '_blank');
+    };
 
     // 音声リスト読み込み（Chrome対策）
     if (synth && synth.onvoiceschanged !== undefined) {

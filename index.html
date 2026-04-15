@@ -209,6 +209,12 @@
                     </div>
                 </div>
 
+                <!-- 辞書で確認ボタン（不一致時のみ表示） -->
+                <div class="dict-lookup hidden" id="dict-lookup">
+                    <button class="btn btn-ghost btn-sm" id="btn-dict-lookup">📖 辞書で確認</button>
+                    <span class="text-sm text-muted" id="dict-lookup-word"></span>
+                </div>
+
                 <!-- レベル更新 -->
                 <div class="level-row">
                     <div class="level-row-left">
@@ -231,6 +237,23 @@
                     <tr><td><kbd>← →</kbd></td><td>前へ / 次へ</td></tr>
                     <tr><td><kbd>0</kbd>〜<kbd>4</kbd></td><td>レベル選択</td></tr>
                 </table>
+            </details>
+
+            <!-- 辞書URL設定 -->
+            <details class="shortcut-guide" id="dict-settings">
+                <summary>📖 辞書リンク設定</summary>
+                <div style="padding:8px 0">
+                    <p class="text-sm text-muted" style="margin-bottom:8px">
+                        誤認識時にWeb辞書で即座に確認できます。辞書のURL末尾に検索語が自動付加されます。
+                    </p>
+                    <div style="display:flex;gap:8px;align-items:center">
+                        <input type="text" class="form-input" id="input-dict-url"
+                               placeholder="例: https://dict.revised.moe.edu.tw/search.jsp?word="
+                               style="flex:1;font-size:0.85rem">
+                        <button class="btn btn-accent btn-sm" id="btn-save-dict-url">保存</button>
+                    </div>
+                    <p class="text-sm text-muted" style="margin-top:4px" id="dict-url-status"></p>
+                </div>
             </details>
         </div>
     </div>
