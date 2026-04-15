@@ -1093,7 +1093,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const dictUrl = localStorage.getItem('dictUrl') || '';
         if (!dictUrl || !lastSpokenText) return;
         const searchUrl = dictUrl + encodeURIComponent(lastSpokenText);
-        window.open(searchUrl, '_blank');
+        // 名前付きポップアップウィンドウとして開く（タブ増殖を防ぎ、画面分割しやすくする）
+        window.open(searchUrl, 'dict_popup_window', 'width=800,height=900,left=100,top=100');
     };
 
     // 音声リスト読み込み（Chrome対策）
